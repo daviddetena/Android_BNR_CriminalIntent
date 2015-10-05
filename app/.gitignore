@@ -1,0 +1,10 @@
+# Custom gitignore
+.gradle
+/local.properties
+.idea
+.DS_Store
+/build
+.iml
+*.iml
+mapsforge-map-android/build
+
