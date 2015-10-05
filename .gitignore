@@ -35,3 +35,19 @@ proguard/
 
 # Android Studio Navigation editor temp files
 .navigation/
+build.gradle
+CriminalIntent.iml
+gradle.properties
+gradlew
+gradlew.bat
+settings.gradle
+.idea/.name
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+.idea/copyright/profiles_settings.xml
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
