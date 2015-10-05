@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
+
 public class CrimeFragment extends Fragment{
 
     // Model
@@ -41,8 +43,10 @@ public class CrimeFragment extends Fragment{
         mDateButton = (Button) v.findViewById(R.id.crime_date);
         mSolvedCheckbox = (CheckBox) v.findViewById(R.id.crime_solved);
 
-        // Set Crime's date as button default date
-        mDateButton.setText(mCrime.getDate().toString());
+        // Set Crime's date as button default date. Custom date
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMM d,yyyy");
+        String dateFormatted = format.format(mCrime.getDate());
+        mDateButton.setText(dateFormatted);
         mDateButton.setEnabled(false);
 
         // Set listener for the edit text when text changed
