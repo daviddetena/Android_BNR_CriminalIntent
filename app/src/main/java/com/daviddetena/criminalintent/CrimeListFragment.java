@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -57,15 +58,42 @@ public class CrimeListFragment extends Fragment {
 
 
     /**
-     * Inner class to hold the View for each row in the list of crimes
+     * Inner class to hold the View for each row in the list of crimes. Now the itemView is a view
+     * inflated with the list_item_crime layout
      */
     private class CrimeHolder extends RecyclerView.ViewHolder{
 
+        // Widgets in the View
         public TextView mTitleTextView;
+        public TextView mDateTextView;
+        public CheckBox mSolvedCheckbox;
 
+        // Model
+        private Crime mCrime;
+
+
+        /**
+         * This method wires up the widgets from model data
+         * @param crime
+         */
+        public void bindCrime(Crime crime){
+            mCrime = crime;
+            mTitleTextView.setText(mCrime.getTitle());
+            mDateTextView.setText(mCrime.getDate().toString());
+            mSolvedCheckbox.setChecked(mCrime.isSolved());
+        }
+
+        /**
+         * Define a CrimeHolder with the widgets from the list_item_crime layout
+         * @param itemView
+         */
         public CrimeHolder(View itemView){
             super(itemView);
-            mTitleTextView = (TextView)itemView;
+
+            // Get the widgets from the view
+            mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
+            mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
+            mSolvedCheckbox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
         }
     }
 
@@ -86,12 +114,12 @@ public class CrimeListFragment extends Fragment {
          * ViewHolder
          * @param parent
          * @param viewType
-         * @return
+         * @return CrimeHolder instance with a view inflated with list_item_crime layout
          */
         @Override
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
 
             return new CrimeHolder(view);
         }
@@ -105,7 +133,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onBindViewHolder(CrimeHolder crimeHolder, int position) {
             Crime crime = mCrimes.get(position);
-            crimeHolder.mTitleTextView.setText(crime.getTitle());
+            crimeHolder.bindCrime(crime);
         }
 
         @Override
