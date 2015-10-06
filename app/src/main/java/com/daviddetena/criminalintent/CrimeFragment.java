@@ -70,7 +70,7 @@ public class CrimeFragment extends Fragment{
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Set the crime's solved property
                 mCrime.setSolved(isChecked);
-                Log.i("hello", String.format("%b",mCrime.isSolved()));
+                //Log.i("hello", String.format("%b",mCrime.isSolved()));
             }
         });
 
