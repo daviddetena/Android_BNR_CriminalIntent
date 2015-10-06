@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class CrimeListFragment extends Fragment {
      * Inner class to hold the View for each row in the list of crimes. Now the itemView is a view
      * inflated with the list_item_crime layout
      */
-    private class CrimeHolder extends RecyclerView.ViewHolder{
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         // Widgets in the View
         public TextView mTitleTextView;
@@ -89,11 +90,20 @@ public class CrimeListFragment extends Fragment {
          */
         public CrimeHolder(View itemView){
             super(itemView);
+            // Set this class as the listener for the view, that is, the CrimeHolder is set as the
+            // receiver of click events for itemView, which is the View for the entire row
+            itemView.setOnClickListener(this);
 
             // Get the widgets from the view
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
             mSolvedCheckbox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
+        }
+
+        @Override
+        public void onClick(View v) {
+            String toastText = String.format("%s clicked!", mCrime.getTitle());
+            Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT).show();
         }
     }
 
