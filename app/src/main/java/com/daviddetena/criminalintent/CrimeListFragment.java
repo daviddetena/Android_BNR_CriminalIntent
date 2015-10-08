@@ -1,5 +1,6 @@
 package com.daviddetena.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class CrimeListFragment extends Fragment {
     private void updateUI(){
 
         // Creates the list of models (CrimeLab)
-        CrimeLab crimeLab = CrimeLab.getCrimeLab(getActivity());
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
         // Assign them to the CrimeAdapter's constructor
@@ -100,10 +100,16 @@ public class CrimeListFragment extends Fragment {
             mSolvedCheckbox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
         }
 
+        /**
+         * Method execute when tapping on a item. We make the Activity of the item tapped appear
+         * @param v
+         */
         @Override
         public void onClick(View v) {
-            String toastText = String.format("%s clicked!", mCrime.getTitle());
-            Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT).show();
+            // New intent from an static method in CrimeActivity that returns a new
+            // Intent with a context and the crimeID
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            startActivity(intent);
         }
     }
 

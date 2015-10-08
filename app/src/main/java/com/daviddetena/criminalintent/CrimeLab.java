@@ -19,7 +19,7 @@ public class CrimeLab {
      * @param context
      * @return
      */
-    public static CrimeLab getCrimeLab(Context context){
+    public static CrimeLab get(Context context){
         if(sCrimeLab == null){
             sCrimeLab = new CrimeLab(context);
         }
