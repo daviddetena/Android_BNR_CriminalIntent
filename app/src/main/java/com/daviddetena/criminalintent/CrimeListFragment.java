@@ -41,6 +41,15 @@ public class CrimeListFragment extends Fragment {
     }
 
     /**
+     * Needs to update the interface when back to foreground
+     */
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
+    /**
      * Update UI by creating an instance of crimeLab and passing it in to the CrimeAdapter
      * constructor
      */
@@ -50,11 +59,19 @@ public class CrimeListFragment extends Fragment {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
-        // Assign them to the CrimeAdapter's constructor
-        mAdapter = new CrimeAdapter(crimes);
+        // Check if adapter already exists
+        if(mAdapter == null){
+            // Assign them to the CrimeAdapter's constructor
+            mAdapter = new CrimeAdapter(crimes);
 
-        // Set RecyclerView's adapter
-        mCrimeRecyclerView.setAdapter(mAdapter);
+            // Set RecyclerView's adapter
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }
+        else{
+            // Already exists => notify changes
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
 
