@@ -1,5 +1,6 @@
 package com.daviddetena.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -41,20 +41,37 @@ public class CrimeListFragment extends Fragment {
     }
 
     /**
+     * Needs to update the interface when back to foreground
+     */
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
+    /**
      * Update UI by creating an instance of crimeLab and passing it in to the CrimeAdapter
      * constructor
      */
     private void updateUI(){
 
         // Creates the list of models (CrimeLab)
-        CrimeLab crimeLab = CrimeLab.getCrimeLab(getActivity());
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
-        // Assign them to the CrimeAdapter's constructor
-        mAdapter = new CrimeAdapter(crimes);
+        // Check if adapter already exists
+        if(mAdapter == null){
+            // Assign them to the CrimeAdapter's constructor
+            mAdapter = new CrimeAdapter(crimes);
 
-        // Set RecyclerView's adapter
-        mCrimeRecyclerView.setAdapter(mAdapter);
+            // Set RecyclerView's adapter
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }
+        else{
+            // Already exists => notify changes
+            mAdapter.notifyDataSetChanged();
+        }
+
     }
 
 
@@ -100,10 +117,16 @@ public class CrimeListFragment extends Fragment {
             mSolvedCheckbox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
         }
 
+        /**
+         * Method execute when tapping on a item. We make the Activity of the item tapped appear
+         * @param v
+         */
         @Override
         public void onClick(View v) {
-            String toastText = String.format("%s clicked!", mCrime.getTitle());
-            Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT).show();
+            // New intent from an static method in CrimeActivity that returns a new
+            // Intent with a context and the crimeID
+            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            startActivity(intent);
         }
     }
 
