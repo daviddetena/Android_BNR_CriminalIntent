@@ -89,18 +89,6 @@ public class CrimeListFragment extends Fragment {
         // Model
         private Crime mCrime;
 
-
-        /**
-         * This method wires up the widgets from model data
-         * @param crime
-         */
-        public void bindCrime(Crime crime){
-            mCrime = crime;
-            mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
-            mSolvedCheckbox.setChecked(mCrime.isSolved());
-        }
-
         /**
          * Define a CrimeHolder with the widgets from the list_item_crime layout
          * @param itemView
@@ -118,14 +106,26 @@ public class CrimeListFragment extends Fragment {
         }
 
         /**
-         * Method execute when tapping on a item. We make the Activity of the item tapped appear
+         * This method wires up the widgets from model data
+         * @param crime
+         */
+        public void bindCrime(Crime crime){
+            mCrime = crime;
+            mTitleTextView.setText(mCrime.getTitle());
+            mDateTextView.setText(mCrime.getDate().toString());
+            mSolvedCheckbox.setChecked(mCrime.isSolved());
+        }
+
+
+        /**
+         * Method executed when tapping on a item. We make CrimePagerActivity
          * @param v
          */
         @Override
         public void onClick(View v) {
-            // New intent from an static method in CrimeActivity that returns a new
+            // New intent from an static method in CrimePagerActivity that returns a new
             // Intent with a context and the crimeID
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
     }
