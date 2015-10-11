@@ -31,3 +31,10 @@ Changelog:
 	* **CrimeListActivity**: class that extends SingleFragmentActivity and implements createFragment() by returning a new CrimeListFragment object.
 * New widgets to hold the new fields in model.
 * *CrimeListActivity* set as the default activity when launching the app.
+
+####Chapter 10:
+Changelog:
+
+* Updated CrimeHolder to start CrimeActivity with the proper Crime object data that was tapped in the list. 
+* CrimeListFragment => [crimeId as *EXTRA*] => CrimeActivity.newIntent() => [crimeId as *ARG*] => CrimeFragment.newInstance().
+* Adapter now refresh data in CrimeListFragment's **UpdateUI()** method. It's also called now in **onResume()** method to show changes in model when back from the Crime detail view.
