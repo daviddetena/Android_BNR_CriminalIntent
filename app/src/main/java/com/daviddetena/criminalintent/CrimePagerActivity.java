@@ -30,7 +30,7 @@ public class CrimePagerActivity extends FragmentActivity {
     public static Intent newIntent(Context packageContext, UUID crimeId){
 
         // Create a new intent with the EXTRA param with the crimeId
-        Intent intent = new Intent(packageContext, CrimeActivity.class);
+        Intent intent = new Intent(packageContext, CrimePagerActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
 
         return intent;
@@ -41,6 +41,7 @@ public class CrimePagerActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crime_pager);
 
+        // Save selected Crime's ID
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
 
         // Wire up
@@ -66,12 +67,11 @@ public class CrimePagerActivity extends FragmentActivity {
         });
 
         for (int i = 0; i < mCrimes.size(); i++) {
+            // If current mId matches crimeId passed in as EXTRA, display that Crime
             if (mCrimes.get(i).getId().equals(crimeId)) {
                 mViewPager.setCurrentItem(i);
                 break;
             }
         }
     }
-
-
 }

@@ -19,7 +19,7 @@ The following things were made along this chapter:
 * New widgets to hold the new fields in model.
 
 
-####Chapter 9:
+####Chapter 9: Crime List
 Changelog:
 
 * Model now contains a **CrimeLab** class to hold a list of Crime objects.
@@ -32,9 +32,16 @@ Changelog:
 * New widgets to hold the new fields in model.
 * *CrimeListActivity* set as the default activity when launching the app.
 
-####Chapter 10:
+####Chapter 10: Crime List with Crime detail view
 Changelog:
 
 * Updated CrimeHolder to start CrimeActivity with the proper Crime object data that was tapped in the list. 
 * CrimeListFragment => [crimeId as *EXTRA*] => CrimeActivity.newIntent() => [crimeId as *ARG*] => CrimeFragment.newInstance().
 * Adapter now refresh data in CrimeListFragment's **UpdateUI()** method. It's also called now in **onResume()** method to show changes in model when back from the Crime detail view.
+
+####Chapter 11: ViewPager
+Changelog:
+
+* Crime detail view is now displayed with a **CrimePagerActivity** object. This allows us to easily move from the current detail view to the previous or the next one by swiping left or right.
+* Replaced intent from CrimeActivity In CrimeHolder's onClick() in CrimeListFragment with intent from CrimePagerActivity to start the Crime detail view from the **ViewPager**.
+* CrimeActivity class deleted.
