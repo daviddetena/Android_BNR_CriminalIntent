@@ -45,3 +45,9 @@ Changelog:
 * Crime detail view is now displayed with a **CrimePagerActivity** object. This allows us to easily move from the current detail view to the previous or the next one by swiping left or right.
 * Replaced intent from CrimeActivity In CrimeHolder's onClick() in CrimeListFragment with intent from CrimePagerActivity to start the Crime detail view from the **ViewPager**.
 * CrimeActivity class deleted.
+
+####Chapter 12: Dialogs
+Changelog:
+
+* Crime detail view presents a DatePicker dialog to change the Crime's date when pressing the button.
+* Communication between two fragments: CrimeFragment, whose date is passed in as arg, and DatePickerFragment, which receives this arg, allows changing the date and send the selected date back to the CrimeFragment. The updated date is now displayed in the Crime detail view and the CrimeList.
