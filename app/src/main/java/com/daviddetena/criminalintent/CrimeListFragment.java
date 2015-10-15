@@ -24,6 +24,7 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
 
     @Override
@@ -47,6 +48,11 @@ public class CrimeListFragment extends Fragment {
         // Layout manager
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        // Get subtitle's visibility status from savedInstanceState
+        if(savedInstanceState != null){
+           mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        }
+
         // Update UI
         updateUI();
 
@@ -60,6 +66,13 @@ public class CrimeListFragment extends Fragment {
     public void onResume(){
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save subtitle's visibility in bundle to preserve when view re-created
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
 
     @Override
@@ -150,6 +163,7 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
 
+        updateSubtitle();
     }
 
 
