@@ -51,3 +51,12 @@ Changelog:
 
 * Crime detail view presents a DatePicker dialog to change the Crime's date when pressing the button.
 * Communication between two fragments: CrimeFragment, whose date is passed in as arg, and DatePickerFragment, which receives this arg, allows changing the date and send the selected date back to the CrimeFragment. The updated date is now displayed in the Crime detail view and the CrimeList.
+
+####Chapter 13: Toolbar
+Changelog:
+
+* Added Toolbar for the app thanks to AppCompat.
+* Toolbar includes two menu actions:
+	*  Add Crime: action to add a new crime object to the CrimeLab.
+	*  Show subtitle: action to show or display the current number of crime as the toolbar's subtitle
+* List of dummy crimes deleted, since we can now add new crimes by ourselves.  
