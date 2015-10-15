@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -19,7 +23,17 @@ public class CrimeListFragment extends Fragment {
     // Recycler View and adapter for it
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private boolean mSubtitleVisible;
+    private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Let the hosting Activity's Fragment Manager know that this Fragment needs to receive
+        // menu callbacks
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -34,6 +48,11 @@ public class CrimeListFragment extends Fragment {
         // Layout manager
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        // Get subtitle's visibility status from savedInstanceState
+        if(savedInstanceState != null){
+           mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        }
+
         // Update UI
         updateUI();
 
@@ -47,6 +66,78 @@ public class CrimeListFragment extends Fragment {
     public void onResume(){
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Save subtitle's visibility in bundle to preserve when view re-created
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // Populate the Menu instance with the items defined in fragment_crime_list.xml menu
+        inflater.inflate(R.menu.fragment_crime_list, menu);
+
+        // Get "show subtitle" menu option
+        MenuItem subtitleItem = menu.findItem(R.id.menu_item_show_subtitle);
+        // Toggle label of the Menu Action in relation of the current visibility
+        if(mSubtitleVisible){
+            subtitleItem.setTitle(R.string.hide_subtitle);
+        }
+        else{
+            subtitleItem.setTitle(R.string.show_subtitle);
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Process to be done regarding the item selected
+        switch(item.getItemId()){
+
+            // Create new Crime, add it to the list and present this Crime with ViewPager
+            case R.id.menu_item_new_crime:
+
+                Crime crime = new Crime();
+                CrimeLab.get(getActivity()).addCrime(crime);
+                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+                startActivity(intent);
+                return true;
+
+            // Toggle toolbar's subtitle visibility with the crime counter
+            case R.id.menu_item_show_subtitle:
+                mSubtitleVisible = !mSubtitleVisible;
+                getActivity().invalidateOptionsMenu();
+                updateSubtitle();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    /**
+     * Update the toolbar's subtitle with the number of crimes, in relation to its visibility
+     */
+    private void updateSubtitle(){
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
+        int crimeCount = crimeLab.getCrimes().size();
+
+        // Get subtitle label from string resources
+        String subtitle = getString(R.string.subtitle_format, crimeCount);
+
+        if(!mSubtitleVisible){
+            subtitle = null;
+        }
+
+        // And set as Toolbar's subtitle
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
     /**
@@ -72,6 +163,7 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
 
+        updateSubtitle();
     }
 
 

@@ -32,14 +32,6 @@ public class CrimeLab {
      */
     private CrimeLab(Context context){
         mCrimes = new ArrayList<>();
-
-        for(int i=0; i<100; i++){
-            Crime crime = new Crime();
-            String title = String.format("Crime #%d", i);
-            crime.setTitle(title);
-            crime.setSolved(i % 2 == 0);    // Set 1 of each 2 as solved by default
-            mCrimes.add(crime);
-        }
     }
 
 
@@ -64,5 +56,14 @@ public class CrimeLab {
             }
         }
         return null;
+    }
+
+
+    /**
+     * Adds a new Crime to the list
+     * @param c
+     */
+    public void addCrime(Crime c){
+        mCrimes.add(c);
     }
 }
