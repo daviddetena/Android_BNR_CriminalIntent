@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -64,6 +67,10 @@ public class CrimeFragment extends Fragment{
 
         // Assign mCrime to be the one by the given crimeId
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+
+        // Let the hosting Activity's Fragment Manager know that this Fragment needs to receive
+        // menu callbacks
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -131,6 +138,29 @@ public class CrimeFragment extends Fragment{
         return v;
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // Populate the Menu instance with the items defined in fragment_crime.xml menu
+        inflater.inflate(R.menu.fragment_crime, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Menu actions
+        switch (item.getItemId()){
+            // Delete crime => pop the user back to the previous activity
+            case R.id.menu_item_detail_delete_crime:
+                CrimeLab.get(getActivity()).deleteCrime(mCrime.getId());
+                getActivity().finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

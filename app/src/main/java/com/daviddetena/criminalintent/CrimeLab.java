@@ -66,4 +66,19 @@ public class CrimeLab {
     public void addCrime(Crime c){
         mCrimes.add(c);
     }
+
+
+    /**
+     * Removes a Crime object by its given id
+     * @param id
+     */
+    public void deleteCrime(UUID id){
+        // Search for the Crime with the given id and delete it
+        for(Crime crime: mCrimes){
+            if(crime.getId().equals(id)){
+                mCrimes.remove(crime);
+                return;
+            }
+        }
+    }
 }
