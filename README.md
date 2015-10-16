@@ -60,3 +60,10 @@ Changelog:
 	*  Add Crime: action to add a new crime object to the CrimeLab.
 	*  Show subtitle: action to show or display the current number of crime as the toolbar's subtitle
 * List of dummy crimes deleted, since we can now add new crimes by ourselves.  
+
+
+**Challenges achieved:**
+
+* **Deleting crimes**:  we have an option in CrimeFragment to remove the current Crime. A call to getActivity's finish() method is necessary after removing the item from the list to pop the user back in navigation.
+* **Plural string resources**: <plurals> tag added to strings resource to pick out between 1 element or more.
+* **Empty view for RecyclerView**: RecyclerView is now included in a LinearLayout along with a TextView and a Button. The TextView and the Button are only displayed when there are no crimes in the Crime list. Otherwise, the RecyclerView is shown. The Button triggers the CrimeFragment the same way as the + Button in the toolbar does.
