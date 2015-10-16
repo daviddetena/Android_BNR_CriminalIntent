@@ -13,7 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,6 +26,8 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private TextView mTextMessage;
+    private Button mButton;
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
 
@@ -52,6 +56,9 @@ public class CrimeListFragment extends Fragment {
         if(savedInstanceState != null){
            mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
+
+        mTextMessage = (TextView) view.findViewById(R.id.fragment_crime_list_message_textview);
+        mButton = (Button) view.findViewById(R.id.fragment_crime_list_message_button);
 
         // Update UI
         updateUI();
@@ -101,11 +108,7 @@ public class CrimeListFragment extends Fragment {
 
             // Create new Crime, add it to the list and present this Crime with ViewPager
             case R.id.menu_item_new_crime:
-
-                Crime crime = new Crime();
-                CrimeLab.get(getActivity()).addCrime(crime);
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
-                startActivity(intent);
+                addCrimeIntent();
                 return true;
 
             // Toggle toolbar's subtitle visibility with the crime counter
@@ -119,6 +122,13 @@ public class CrimeListFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    private void addCrimeIntent() {
+        Crime crime = new Crime();
+        CrimeLab.get(getActivity()).addCrime(crime);
+        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+        startActivity(intent);
     }
 
     /**
@@ -161,6 +171,22 @@ public class CrimeListFragment extends Fragment {
         else{
             // Already exists => notify changes
             mAdapter.notifyDataSetChanged();
+        }
+
+        // Show or hide text and button when no crimes
+        if(crimes.size()==0){
+            mTextMessage.setVisibility(View.VISIBLE);
+            mButton.setVisibility(View.VISIBLE);
+            mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addCrimeIntent();
+                }
+            });
+        }
+        else{
+            mButton.setVisibility(View.GONE);
+            mTextMessage.setVisibility(View.GONE);
         }
 
         updateSubtitle();
@@ -243,10 +269,20 @@ public class CrimeListFragment extends Fragment {
          */
         @Override
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
 
-            return new CrimeHolder(view);
+            if(mCrimes.isEmpty()){
+                mTextMessage.setVisibility(View.VISIBLE);
+                mButton.setVisibility(View.VISIBLE);
+                return null;
+            }
+            else{
+                mTextMessage.setVisibility(View.GONE);
+                mButton.setVisibility(View.GONE);
+                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                View view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
+
+                return new CrimeHolder(view);
+            }
         }
 
         /**
