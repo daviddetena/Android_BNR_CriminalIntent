@@ -1,5 +1,7 @@
 package com.daviddetena.criminalintent;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +32,31 @@ public class CrimeListFragment extends Fragment {
     private Button mButton;
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
+    private Callbacks mCallbacks;
+
+
+    /**
+     * Interface that any activity holding this fragment will have to implement
+     */
+    public interface Callbacks{
+        void onCrimeSelected(Crime crime);
+    }
+
+    /**
+     * Assign the Activity that will hold the callback methods in the interface
+     * @param activity
+     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,8 +154,12 @@ public class CrimeListFragment extends Fragment {
     private void addCrimeIntent() {
         Crime crime = new Crime();
         CrimeLab.get(getActivity()).addCrime(crime);
-        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
-        startActivity(intent);
+
+        // Need to refresh UI for the list to be visible on tablets
+        updateUI();
+
+        // Call the hosting Activity's interface method
+        mCallbacks.onCrimeSelected(crime);
     }
 
     /**
@@ -154,7 +185,7 @@ public class CrimeListFragment extends Fragment {
      * Update UI by creating an instance of crimeLab and passing it in to the CrimeAdapter
      * constructor
      */
-    private void updateUI(){
+    public void updateUI(){
 
         // Creates the list of models (CrimeLab)
         CrimeLab crimeLab = CrimeLab.get(getActivity());
@@ -241,10 +272,8 @@ public class CrimeListFragment extends Fragment {
          */
         @Override
         public void onClick(View v) {
-            // New intent from an static method in CrimePagerActivity that returns a new
-            // Intent with a context and the crimeID
-            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(intent);
+            // Call the hosting Activity's interface method
+            mCallbacks.onCrimeSelected(mCrime);
         }
     }
 

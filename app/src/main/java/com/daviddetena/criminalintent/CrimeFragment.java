@@ -31,6 +31,9 @@ public class CrimeFragment extends Fragment{
     // Result for checking Fragment sender code
     private static final int REQUEST_DATE = 0;
 
+    // Variable for holding interface methods
+    private Callbacks mCallbacks;
+
     // Model
     private Crime mCrime;
 
@@ -38,6 +41,27 @@ public class CrimeFragment extends Fragment{
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckbox;
+
+
+    /**
+     * Interface that any activity holding this fragment will have to implement
+     */
+    public interface Callbacks{
+        void onCrimeUpdated(Crime crime);
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     /**
      * Get a CrimeFragment object with arguments from a parameter passed in
@@ -92,8 +116,10 @@ public class CrimeFragment extends Fragment{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Save the typed text to our crime title
+                // Save the typed text to our crime title and notify about changes
                 mCrime.setTitle(s.toString());
+                // Update changes
+                updateCrime();
             }
 
             @Override
@@ -131,6 +157,7 @@ public class CrimeFragment extends Fragment{
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // Set the crime's solved property
                 mCrime.setSolved(isChecked);
+                updateCrime();
                 //Log.i("hello", String.format("%b",mCrime.isSolved()));
             }
         });
@@ -174,6 +201,7 @@ public class CrimeFragment extends Fragment{
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
+            updateCrime();
         }
     }
 
@@ -184,4 +212,15 @@ public class CrimeFragment extends Fragment{
         // Set Crime's date as button default date
         mDateButton.setText(mCrime.getDate().toString());
     }
+
+
+    /**
+     * When a crime is updated, all the holding activities must be notified via the callback
+     * interface
+     */
+    private void updateCrime(){
+        // Include DB update when implementing chapter 14
+        mCallbacks.onCrimeUpdated(mCrime);
+    }
+
 }
