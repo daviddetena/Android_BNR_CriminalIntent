@@ -13,4 +13,13 @@ public class CrimeListActivity extends SingleFragmentActivity{
     protected Fragment createFragment() {
         return new CrimeListFragment();
     }
+
+    /**
+     * Gets the ID for the two-pane layout
+     * @return
+     */
+    @Override
+    protected int getLayoutResId(){
+        return R.layout.activity_masterdetail;
+    }
 }
