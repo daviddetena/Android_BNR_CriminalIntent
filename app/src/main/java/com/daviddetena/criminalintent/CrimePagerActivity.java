@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.List;
 import java.util.UUID;
 
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity implements CrimeFragment.Callbacks{
 
     // EXTRA for current CrimeFragment to display
     private static final String EXTRA_CRIME_ID = "com.daviddetena.criminalintent.crime_id";
@@ -74,5 +74,21 @@ public class CrimePagerActivity extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+
+    /**
+     * Method from CrimeFragment's Callback interface.
+     * We need to set the new
+     * @param crime
+     */
+    @Override
+    public void onCrimeUpdated(Crime crime) {
+
+    }
+
+    @Override
+    public void onCrimeDeleted(Crime crime) {
+
     }
 }
