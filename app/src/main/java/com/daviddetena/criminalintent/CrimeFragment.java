@@ -48,6 +48,7 @@ public class CrimeFragment extends Fragment{
      */
     public interface Callbacks{
         void onCrimeUpdated(Crime crime);
+        void onCrimeDeleted(Crime crime);
     }
 
 
@@ -181,7 +182,14 @@ public class CrimeFragment extends Fragment{
             // Delete crime => pop the user back to the previous activity
             case R.id.menu_item_detail_delete_crime:
                 CrimeLab.get(getActivity()).deleteCrime(mCrime.getId());
-                getActivity().finish();
+
+                // if phone
+                if(getActivity().findViewById(R.id.detail_fragment_container) == null){
+                    getActivity().finish();
+                }
+                else{
+                    // tablets => display another item
+                }
                 return true;
 
             default:
@@ -223,4 +231,11 @@ public class CrimeFragment extends Fragment{
         mCallbacks.onCrimeUpdated(mCrime);
     }
 
+    /**
+     * When a crime is deleted, the holding activities must be notified via the callback interface
+     */
+    private void deleteCrime(){
+        // Include DB update when implementing chapter 14
+        mCallbacks.onCrimeDeleted(mCrime);
+    }
 }
